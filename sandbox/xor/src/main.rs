@@ -2,10 +2,31 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-fn main() -> std::io::Result<()> {
-    const BUFFER_SIZE: usize = 10;
+use structopt::StructOpt;
 
-    let file = File::open("Cargo.toml")?;
+#[derive(StructOpt, Debug)]
+struct CliOptions {
+    #[structopt(short = "c", long = "chunk-size")]
+    chunk_size: Option<usize>,
+    #[structopt(parse(from_os_str))]
+    path: std::path::PathBuf,
+    // pattern: String,
+    // #[structopt(parse(from_os_str))]
+    // path: std::path::PathBuf,
+    // play with optional value
+    // value: Option<String>,
+}
+
+fn main() -> std::io::Result<()> {
+    let args = CliOptions::from_args();
+
+    // const BUFFER_SIZE: usize = 10;
+    let BUFFER_SIZE: usize = match args.chunk_size {
+        Some(size) => size,
+        None => 1024,
+    };
+
+    let file = File::open(args.path)?;
 
     let mut reader = BufReader::with_capacity(BUFFER_SIZE, file);
 
