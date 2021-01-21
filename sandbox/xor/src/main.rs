@@ -25,7 +25,7 @@ fn main() -> std::io::Result<()> {
     let mut reader = BufReader::with_capacity(chunk_size, file);
 
     loop {
-        let mut buffer = reader.fill_buf()?;
+        let buffer = reader.fill_buf()?;
         if buffer.len() == 0 {
             break;
         }
