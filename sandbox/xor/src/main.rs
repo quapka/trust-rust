@@ -10,11 +10,6 @@ struct CliOptions {
     chunk_size: Option<usize>,
     #[structopt(parse(from_os_str))]
     path: std::path::PathBuf,
-    // pattern: String,
-    // #[structopt(parse(from_os_str))]
-    // path: std::path::PathBuf,
-    // play with optional value
-    // value: Option<String>,
 }
 
 fn main() -> std::io::Result<()> {
