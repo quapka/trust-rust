@@ -20,22 +20,21 @@ struct CliOptions {
 fn main() -> std::io::Result<()> {
     let args = CliOptions::from_args();
 
-    // const BUFFER_SIZE: usize = 10;
-    let BUFFER_SIZE: usize = match args.chunk_size {
+    let chunk_size: usize = match args.chunk_size {
         Some(size) => size,
         None => 1024,
     };
 
     let file = File::open(args.path)?;
 
-    let mut reader = BufReader::with_capacity(BUFFER_SIZE, file);
+    let mut reader = BufReader::with_capacity(chunk_size, file);
 
     loop {
         let mut buffer = reader.fill_buf()?;
         if buffer.len() == 0 {
             break;
         }
-        // let xored: [u8; BUFFER_SIZE] = buffer.into_iter().map(|x| x ^ 13).collect();
+        // let xored: [u8; chunk_size] = buffer.into_iter().map(|x| x ^ 13).collect();
         let xored: Vec<u8> = buffer.into_iter().map(|x| x ^ 13).collect();
 
         println!("Read: {:?}", buffer);
