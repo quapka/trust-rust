@@ -37,9 +37,6 @@ fn main() -> std::io::Result<()> {
     };
     let mut writer = BufWriter::new(File::create(out_file)?);
 
-    // buffer.write_all(b"some bytes")?;
-    // buffer.flush()?;
-
     let mut keystream = args.key.bytes().cycle();
 
     loop {
@@ -47,15 +44,11 @@ fn main() -> std::io::Result<()> {
         if buffer.len() == 0 {
             break;
         }
-        // let xored: [u8; chunk_size] = buffer.into_iter().map(|x| x ^ 13).collect();
-        // let xored: Vec<u8> = buffer.into_iter().map(|x| x ^ 13).collect();
         let chunk_key = keystream.by_ref().take(buffer.len());
         let xored: Vec<u8> = buffer.iter().zip(chunk_key).map(|(p, k)| p ^ k).collect();
         writer.write_all(&xored)?;
         writer.flush()?;
 
-        // println!("Read: {:?}", buffer);
-        // println!("Xored: {:?}", xored);
         let n = buffer.len();
         reader.consume(n);
     }
