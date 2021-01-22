@@ -41,15 +41,16 @@ fn main() -> std::io::Result<()> {
 
     loop {
         let buffer = reader.fill_buf()?;
-        if buffer.len() == 0 {
+        let buf_size = buffer.len();
+        if buf_size == 0 {
             break;
         }
-        let chunk_key = keystream.by_ref().take(buffer.len());
+        let chunk_key = keystream.by_ref().take(buf_size);
         let xored: Vec<u8> = buffer.iter().zip(chunk_key).map(|(p, k)| p ^ k).collect();
+
         writer.write_all(&xored)?;
         writer.flush()?;
 
-        let n = buffer.len();
         reader.consume(n);
     }
 
