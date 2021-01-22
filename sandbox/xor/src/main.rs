@@ -52,7 +52,7 @@ fn main() -> std::io::Result<()> {
         writer.write_all(&xored)?;
         writer.flush()?;
 
-        reader.consume(n);
+        reader.consume(buf_size);
     }
 
     Ok(())
