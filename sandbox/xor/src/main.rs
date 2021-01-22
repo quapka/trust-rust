@@ -32,6 +32,7 @@ fn main() -> std::io::Result<()> {
     let out_file: std::path::PathBuf = match args.output {
         Some(path) => path,
         None => {
+            // TODO is there a better way to join path and string with 'dash'
             std::path::PathBuf::from([args.input.to_str().unwrap(), args.key.as_str()].join("-"))
         }
     };
