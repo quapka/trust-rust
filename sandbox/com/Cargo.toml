@@ -3,4 +3,5 @@
 members = [
     "library",
     "server",
+    "client",
 ]
